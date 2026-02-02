@@ -3,16 +3,21 @@ package demo.controller;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import demo.dto.ProductDTO;
 import demo.entity.Product;
 import demo.service.ProductService;
 import demo.vo.Result;
@@ -89,6 +94,13 @@ public class ProductController {
         model.addAttribute("product", product);
         return "product-edit";	
     }
+    
+    /**
+     * 商品削除
+     * 
+     * @param id 商品ID
+     * @return 削除結果
+     */
     @DeleteMapping("/{id}")
     @ResponseBody
     public Result<Void> deleteById(@PathVariable Long id){
@@ -103,4 +115,36 @@ public class ProductController {
             return Result.error(e.getMessage());
         }
     }
+    
+    /**
+     * 商品更新機能
+     * 
+     * @param productDTO 商品情報
+     * @param bindingResult データチェック結果
+     * @return 更新結果
+     */
+    @PostMapping("/update")
+    @ResponseBody
+    public Result<Product> update(@Valid @RequestBody ProductDTO productDTO,
+                                  BindingResult bindingResult) {
+        log.info("商品更新リクエスト処理，商品ID：{}", productDTO.getId());
+        
+        // リクエストパラメータチェック
+        if (bindingResult.hasErrors()) {
+            String errorMsg = bindingResult.getFieldError().getDefaultMessage();
+            log.warn("商品更新パラメータチェック失敗：{}", errorMsg);
+            return Result.error(errorMsg);
+        }
+        
+        try {
+            Product product = productService.update(productDTO);
+            log.info("商品更新成功：{}", product.getId());
+            return Result.success("更新成功", product);
+        } catch (Exception e) {
+            log.error("商品更新失敗：{}", e.getMessage());
+            return Result.error(e.getMessage());
+        }
+    }
+    
+    
 }

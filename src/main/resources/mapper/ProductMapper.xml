@@ -3,12 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!--
-    产品Mapper XML映射文件
-    对应接口：com.mall.management.mapper.ProductMapper
+    商品Mapper XMLマッピングファイル
+    対応API：demo.mapper.ProductMapper
 -->
 <mapper namespace="demo.mapper.ProductMapper">
 
-    <!-- 结果映射 -->
+    <!-- マッピング結果 -->
     <resultMap id="BaseResultMap" type="demo.entity.Product">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="product_name" property="productName" jdbcType="VARCHAR"/>
@@ -22,7 +22,7 @@
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <!-- 基础列 -->
+    <!-- 商品データまとめ -->
     <sql id="Base_Column_List">
         id, product_name, product_code, category, price, stock, description, status, create_time, update_time
     </sql>
@@ -41,9 +41,39 @@
         FROM product
         WHERE id = #{id}
     </select>
+    
 	 <!-- 商品ID条件で削除 -->
     <delete id="deleteById">
         DELETE FROM product WHERE id = #{id}
+    </delete>
+    
+    <!-- 商品更新 -->
+    <delete id="update" parameterType = "demo.entity.Product">
+      UPDATE product
+       <set>
+         <if test = "productName != null and productName != ''">
+         	product_name = #{productName},
+         </if>
+         <if test = "productCode != null and productCode != ''">
+        		product_code = #{productCode},
+         </if>
+         <if test = "category != null">
+         	category = #{category},
+         </if>
+          <if test = "price != null">
+         	price = #{price},
+         </if>
+          <if test = "stock != null">
+         	stock = #{stock},
+         </if>
+          <if test = "description != null">
+         	description = #{description},
+         </if>
+          <if test = "status != null">
+         	status = #{status},
+         </if>
+       </set>
+       WHERE id = #{id}
     </delete>
   
 </mapper>

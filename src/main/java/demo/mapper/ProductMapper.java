@@ -16,18 +16,28 @@ public interface ProductMapper {
 	 * return 商品検索リスト
 	 */
 	List<Product> findAll();
+	
 	/*
 	 * 商品一覧検索
 	 * param id
-	 * return 商品検索リスト
+	 * 
 	 */
 	Product findById(@Param("id") Long id);
+	
 	/*
 	 * 商品削除
 	 * param id
-	 * return 商品検索リスト
+	 * 
 	 */
 	int deleteById(@Param("id")Long id);
+	
+	/*
+	 * 商品更新ｎ
+	 * param product商品情報
+	 * 
+	 */
+	int update(Product product);
+	
 
 	
 

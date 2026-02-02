@@ -83,14 +83,14 @@
     </div>
 
     <script>
-        // 产品表单提交处理
+        // 商品フォーム送信処理
         document.getElementById('productForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // 清除之前的错误提示
+            // クリア前にミス提示
             clearErrors();
             
-            // 获取表单数据
+            // フォームのデータ取得
             const formData = {
                 id: parseInt(document.getElementById('productId').value),
                 productName: document.getElementById('productName').value.trim(),
@@ -99,23 +99,22 @@
                 price: parseFloat(document.getElementById('price').value),
                 stock: parseInt(document.getElementById('stock').value),
                 description: document.getElementById('description').value.trim(),
-                imageUrl: document.getElementById('imageUrl').value.trim(),
                 status: parseInt(document.getElementById('status').value)
             };
             
-            // 前端校验
+            // フロント側から検証
             if (!validateForm(formData)) {
                 return;
             }
             
-            // 禁用提交按钮
+            // 送信ボタンを無効にする
             const submitBtn = this.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
             submitBtn.textContent = '更新中...';
             
             try {
-                // 发送更新请求
-                const response = await fetch('/mall/product/update', {
+                // 更新リクエスト送信
+                const response = await fetch('/zhl/product/update', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -127,52 +126,52 @@
                 
                 if (result.code === 200) {
                     // 更新成功
-                    showAlert('更新成功，正在跳转...', 'success');
+                    showAlert('更新成功，リダイレクト...', 'success');
                     setTimeout(() => {
-                        window.location.href = '/mall/product/list';
+                        window.location.href = '/zhl/product/list';
                     }, 1000);
                 } else {
-                    // 更新失败
-                    showAlert(result.message || '更新失败', 'error');
+                    // 更新失敗
+                    showAlert(result.message || '更新失敗', 'error');
                     submitBtn.disabled = false;
                     submitBtn.textContent = '更新';
                 }
             } catch (error) {
-                console.error('更新产品失败:', error);
-                showAlert('网络错误，请稍后重试', 'error');
+                console.error('商品更新失敗:', error);
+                showAlert('ネットワークエラーです。しばらくしてからもう一度お試しください', 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = '更新';
             }
         });
         
-        // 表单校验
+        // フォームデータチェック
         function validateForm(data) {
             let isValid = true;
             
             if (!data.productName || data.productName.length < 2) {
-                showFieldError('productName', '产品名称至少2个字符');
+                showFieldError('productName', '商品名は最小2文字から');
                 isValid = false;
             }
             
             if (!data.productCode || !/^[a-zA-Z0-9-]+$/.test(data.productCode)) {
-                showFieldError('productCode', '产品编码只能包含字母、数字、横线');
+                showFieldError('productCode', '商品コード文字，文字、数字、-線');
                 isValid = false;
             }
             
             if (isNaN(data.price) || data.price <= 0) {
-                showFieldError('price', '价格必须大于0');
+                showFieldError('price', '価格は0より大きい数字');
                 isValid = false;
             }
             
             if (isNaN(data.stock) || data.stock < 0) {
-                showFieldError('stock', '库存数量不能小于0');
+                showFieldError('stock', '在庫数は0以下ではできません0');
                 isValid = false;
             }
             
             return isValid;
         }
         
-        // 显示消息提示
+        // メッセージプロンプトを表示
         function showAlert(message, type) {
             const alertBox = document.getElementById('alertBox');
             alertBox.textContent = message;
@@ -183,7 +182,7 @@
             }, 3000);
         }
         
-        // 显示字段错误
+        // フィールドエラーの表示
         function showFieldError(fieldName, message) {
             const input = document.getElementById(fieldName);
             const error = document.getElementById(fieldName + 'Error');
@@ -192,7 +191,7 @@
             error.classList.add('show');
         }
         
-        // 清除所有错误提示
+        // すべてのエラーメッセージをクリアする
         function clearErrors() {
             const inputs = document.querySelectorAll('.form-input');
             const errors = document.querySelectorAll('.form-error');
@@ -206,7 +205,7 @@
             document.getElementById('alertBox').className = 'alert';
         }
         
-        // 输入时清除错误提示
+        // 入力中にエラーメッセージを消去する
         document.querySelectorAll('.form-input').forEach(input => {
             input.addEventListener('input', function() {
                 this.classList.remove('error');

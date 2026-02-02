@@ -2,6 +2,7 @@ package demo.service;
 
 import java.util.List;
 
+import demo.dto.ProductDTO;
 import demo.entity.Product;
 
 
@@ -20,11 +21,18 @@ public interface ProductService {
 	 * @param ID
 	 */
 	Product findById(Long id);
+	
 	/*
 	 * 商品削除ID
 	 * @param ID
 	 */
 	void deleteById(Long id);
+	
+	/*
+	 * 商品更新ID
+	 * @param productDTO 商品情報
+	 */
+	Product update(ProductDTO productDTO);
 	
 
 }
