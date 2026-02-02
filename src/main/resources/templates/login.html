@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理員登録 - EC商品管理システム</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+
+<!--<h2 class="text-center">ログイン</h2class="text-center">-->
+	<div class="form-container">
+	        <h1>EC商品管理システム</h1>
+	        <h2 class="text-center">User IDログイン</h2>
+	        
+	        <!-- 消息提示 -->
+	        <div id="alertBox" class="alert"></div>
+	<!-- 登録画面 -->
+	        <form id="loginForm">
+	            <div class="form-group">
+	                <label for="username" class="form-label">ユーザーID / User ID</label>
+	                <input type="text" id="username" name="username" class="form-input" placeholder="ユーザーID入力" required>
+	                <div id="usernameError" class="form-error"></div>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label for="password" class="form-label">パスワード</label>
+	                <input type="password" id="password" name="password" class="form-input" placeholder="パスワード入力" required>
+	                <div id="passwordError" class="form-error"></div>
+	            </div>
+	            
+	            <div class="form-group">
+	                <button type="submit" class="btn btn-primary btn-block">ログイン</button>
+	            </div>
+	            
+	            <div class="form-group text-center">
+	                <span>管理者口座作成？</span>
+	                <a th:href="@{/user/register}" class="link">口座作成</a>
+	            </div>
+	        </form>
+	    </div>
+		
+		<script>
+			
+				document.getElementById
+		      // ログインフォーム処理
+		      document.getElementById('loginForm').addEventListener('submit', async function(e) {
+		          e.preventDefault();
+		          
+		          // クリア前にミス提示
+		          clearErrors();
+		          
+		          // フォームのデータ取得
+		          const username = document.getElementById('username').value.trim();
+		          const password = document.getElementById('password').value.trim();
+		          
+		          // フロント側から検証
+		          if (!username) {
+		              showFieldError('username', 'ユーザー名入力してください');
+		              return;
+		          }
+		          
+		          if (!password) {
+		              showFieldError('password', 'パスワード入力してください');
+		              return;
+		          }
+		          
+		          // 送信ボタンを無効にする
+		          const submitBtn = this.querySelector('button[type="submit"]');
+		          submitBtn.disabled = true;
+		          submitBtn.textContent = '登録中...';
+		          
+		          try {
+		              // ログインリクエストを送信
+		              const response = await fetch('/zhl/user/login', {
+		                  method: 'POST',
+		                  headers: {
+		                      'Content-Type': 'application/json'
+		                  },
+		                  body: JSON.stringify({ username, password })
+		              });
+		              
+		              const result = await response.json();
+		              
+		              if (result.code === 200) {
+		                  // ログイン成功
+		                  showAlert('ログイン中...', 'success');
+		                  setTimeout(() => {
+		                      window.location.href = '/zhl/product/list';
+		                  }, 1000);
+		              } else {
+		                  // ログイン失敗
+		                  showAlert(result.message || 'ログイン失敗', 'error');
+		                  submitBtn.disabled = false;
+		                  submitBtn.textContent = 'ログイン';
+		              }
+		          } catch (error) {
+		              console.error('ログインリクエスト失敗:', error);
+		              showAlert('ネットワークエラーです。しばらくしてからもう一度お試しください。', 'error');
+		              submitBtn.disabled = false;
+		              submitBtn.textContent = 'ログイン';
+		          }
+		      });
+		      
+		      // メッセージプロンプトを表示
+		      function showAlert(message, type) {
+		          const alertBox = document.getElementById('alertBox');
+		          alertBox.textContent = message;
+		          alertBox.className = 'alert alert-' + type + ' show';
+		          
+		          // 3秒後に自動的に非表示になります
+		          setTimeout(() => {
+		              alertBox.className = 'alert';
+		          }, 3000);
+		      }
+		      
+		      // フィールドエラーの表示
+		      function showFieldError(fieldName, message) {
+		          const input = document.getElementById(fieldName);
+		          const error = document.getElementById(fieldName + 'Error');
+		          input.classList.add('error');
+		          error.textContent = message;
+		          error.classList.add('show');
+		      }
+		      
+		      // すべてのエラーメッセージをクリアする
+		      function clearErrors() {
+		          const inputs = document.querySelectorAll('.form-input');
+		          const errors = document.querySelectorAll('.form-error');
+		          
+		          inputs.forEach(input => input.classList.remove('error'));
+		          errors.forEach(error => {
+		              error.textContent = '';
+		              error.classList.remove('show');
+		          });
+		          
+		          document.getElementById('alertBox').className = 'alert';
+		      }
+		      
+		      // 入力中にエラーメッセージを消去する
+		      document.querySelectorAll('.form-input').forEach(input => {
+		          input.addEventListener('input', function() {
+		              this.classList.remove('error');
+		              const error = document.getElementById(this.id + 'Error');
+		              if (error) {
+		                  error.textContent = '';
+		                  error.classList.remove('show');
+		              }
+		          });
+		      });
+		  </script>
+		
+   </body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>新規口座作成 - 商品管理システム</title>
+	    <link rel="stylesheet" th:href="@{/css/common.css}">
+	</head>
+	<body>
+	    <div class="form-container">
+	        <h1>商品管理システム</h1>
+	        <h2 class="text-center">新規口座作成</h2>
+	        
+	        <!-- 情報提示 -->
+	        <div id="alertBox" class="alert"></div>
+	        
+	        <!-- 新規作成フォーム -->
+	        <form id="registerForm">
+	            <div class="form-group">
+	                <label for="username" class="form-label">ユーザー名 <span style="color: #e74c3c;">*</span></label>
+	                <input type="text" id="username" name="username" class="form-input" placeholder="3-20個文字符号，文字、数字、_" required>
+	                <div id="usernameError" class="form-error"></div>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label for="password" class="form-label">パスワード <span style="color: #e74c3c;">*</span></label>
+	                <input type="password" id="password" name="password" class="form-input" placeholder="6-20個文字符号" required>
+	                <div id="passwordError" class="form-error"></div>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label for="confirmPassword" class="form-label">確認パスワード <span style="color: #e74c3c;">*</span></label>
+	                <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="再度パスワード入力" required>
+	                <div id="confirmPasswordError" class="form-error"></div>
+	            </div>
+	            
+	            <div class="form-group">
+	                <button type="submit" class="btn btn-success btn-block">新規口座作成</button>
+	            </div>
+	            
+	            <div class="form-group text-center">
+	                <span>アカウントをお持ちの場合？</span>
+	                <a th:href="@{/user/login}" class="link">ログイン</a>
+	            </div>
+	        </form>
+		</div>
+
+</body>
+</html>

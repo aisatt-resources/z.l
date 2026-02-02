@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品情報更新 - 商品管理システム</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+    <!-- ボディ情報 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="#" class="navbar-brand">商品管理システム</a>
+            <div class="navbar-user">
+                <a th:href="@{/product/list}" class="navbar-link">商品リスト画面戻る</a>
+                <a th:href="@{/user/logout}" class="navbar-link">ログアウト</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container" style="max-width: 800px;">
+            <h2>商品情報更新</h2>
+            
+            <!-- 情報提示 -->
+            <div id="alertBox" class="alert"></div>
+            
+            <!-- 商品フォーム -->
+            <form id="productForm">
+                <input type="hidden" id="productId" th:value="${product.id}">
+                
+                <div class="form-group">
+                    <label for="productName" class="form-label">商品名 <span style="color: #e74c3c;">*</span></label>
+                    <input type="text" id="productName" name="productName" class="form-input" th:value="${product.productName}" required>
+                    <div id="productNameError" class="form-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productCode" class="form-label">商品コード <span style="color: #e74c3c;">*</span></label>
+                    <input type="text" id="productCode" name="productCode" class="form-input" th:value="${product.productCode}" required>
+                    <div id="productCodeError" class="form-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category" class="form-label">商品分類</label>
+                    <input type="text" id="category" name="category" class="form-input" th:value="${product.category}">
+                    <div id="categoryError" class="form-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="price" class="form-label">価格 <span style="color: #e74c3c;">*</span></label>
+                    <input type="number" id="price" name="price" class="form-input" th:value="${product.price}" step="0" min="0" required>
+                    <div id="priceError" class="form-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="stock" class="form-label">在庫数 <span style="color: #e74c3c;">*</span></label>
+                    <input type="number" id="stock" name="stock" class="form-input" th:value="${product.stock}" min="0" required>
+                    <div id="stockError" class="form-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description" class="form-label">コメント</label>
+                    <textarea id="description" name="description" class="form-input" rows="4" style="resize: vertical;" th:text="${product.description}"></textarea>
+                    <div id="descriptionError" class="form-error"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="status" class="form-label">ステータス <span style="color: #e74c3c;">*</span></label>
+                    <select id="status" name="status" class="form-input" required>
+                        <option value="1" th:selected="${product.status == 1}">購入可能</option>
+                        <option value="0" th:selected="${product.status == 0}">購入不可</option>
+                    </select>
+                    <div id="statusError" class="form-error"></div>
+                </div>
+                
+                <div class="form-group" style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">更新</button>
+                    <a th:href="@{/product/list}" class="btn btn-secondary" style="flex: 1; display: inline-block; line-height: 1.6;">キャンセル</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 产品表单提交处理
+        document.getElementById('productForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // 清除之前的错误提示
+            clearErrors();
+            
+            // 获取表单数据
+            const formData = {
+                id: parseInt(document.getElementById('productId').value),
+                productName: document.getElementById('productName').value.trim(),
+                productCode: document.getElementById('productCode').value.trim(),
+                category: document.getElementById('category').value.trim(),
+                price: parseFloat(document.getElementById('price').value),
+                stock: parseInt(document.getElementById('stock').value),
+                description: document.getElementById('description').value.trim(),
+                imageUrl: document.getElementById('imageUrl').value.trim(),
+                status: parseInt(document.getElementById('status').value)
+            };
+            
+            // 前端校验
+            if (!validateForm(formData)) {
+                return;
+            }
+            
+            // 禁用提交按钮
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '更新中...';
+            
+            try {
+                // 发送更新请求
+                const response = await fetch('/mall/product/update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.code === 200) {
+                    // 更新成功
+                    showAlert('更新成功，正在跳转...', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/mall/product/list';
+                    }, 1000);
+                } else {
+                    // 更新失败
+                    showAlert(result.message || '更新失败', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '更新';
+                }
+            } catch (error) {
+                console.error('更新产品失败:', error);
+                showAlert('网络错误，请稍后重试', 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '更新';
+            }
+        });
+        
+        // 表单校验
+        function validateForm(data) {
+            let isValid = true;
+            
+            if (!data.productName || data.productName.length < 2) {
+                showFieldError('productName', '产品名称至少2个字符');
+                isValid = false;
+            }
+            
+            if (!data.productCode || !/^[a-zA-Z0-9-]+$/.test(data.productCode)) {
+                showFieldError('productCode', '产品编码只能包含字母、数字、横线');
+                isValid = false;
+            }
+            
+            if (isNaN(data.price) || data.price <= 0) {
+                showFieldError('price', '价格必须大于0');
+                isValid = false;
+            }
+            
+            if (isNaN(data.stock) || data.stock < 0) {
+                showFieldError('stock', '库存数量不能小于0');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // 显示消息提示
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = 'alert alert-' + type + ' show';
+            
+            setTimeout(() => {
+                alertBox.className = 'alert';
+            }, 3000);
+        }
+        
+        // 显示字段错误
+        function showFieldError(fieldName, message) {
+            const input = document.getElementById(fieldName);
+            const error = document.getElementById(fieldName + 'Error');
+            input.classList.add('error');
+            error.textContent = message;
+            error.classList.add('show');
+        }
+        
+        // 清除所有错误提示
+        function clearErrors() {
+            const inputs = document.querySelectorAll('.form-input');
+            const errors = document.querySelectorAll('.form-error');
+            
+            inputs.forEach(input => input.classList.remove('error'));
+            errors.forEach(error => {
+                error.textContent = '';
+                error.classList.remove('show');
+            });
+            
+            document.getElementById('alertBox').className = 'alert';
+        }
+        
+        // 输入时清除错误提示
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+                const error = document.getElementById(this.id + 'Error');
+                if (error) {
+                    error.textContent = '';
+                    error.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
