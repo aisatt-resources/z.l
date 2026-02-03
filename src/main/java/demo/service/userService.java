@@ -12,7 +12,7 @@ public interface userService {
 	/*
 	 * 新規口座作成
 	 */
-	void register(user user);
+	//void register(user user);
 	
 	/*
 	 * ユーザーIDログイン

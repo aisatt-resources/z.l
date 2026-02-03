@@ -62,8 +62,8 @@ public class userServiceImpl implements userService {
 	/*
 	 * 新規ユーザー登録
 	*/
-	@Override
-	public void  register(user user) {
-		userMapper.insert(user);
-	} 
+//	@Override
+//	public void  register(user user) {
+//		userMapper.insert(user);
+//	} 
 }

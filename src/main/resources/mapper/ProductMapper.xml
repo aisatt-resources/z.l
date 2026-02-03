@@ -27,14 +27,14 @@
         id, product_name, product_code, category, price, stock, description, status, create_time, update_time
     </sql>
 
-    <!-- すべて商品リスト検索 -->
+    <!-- すべて商品リスト検索 リスト画面に商品データ表示-->
     <select id="findAll" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM product
     </select>
     
-     <!-- 商品ID条件で検索 -->
+     <!-- 商品ID条件で検索 ID検索結果で更新画面に遷移-->
     <select id="findById" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -42,12 +42,20 @@
         WHERE id = #{id}
     </select>
     
+       <!-- 商品コード条件で検索 -->
+    <select id="findByproductCode" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM product
+        WHERE product_Code = #{productCode}
+    </select>
+    
 	 <!-- 商品ID条件で削除 -->
     <delete id="deleteById">
         DELETE FROM product WHERE id = #{id}
     </delete>
     
-    <!-- 商品更新 -->
+    <!-- 商品データ更新 -->
     <delete id="update" parameterType = "demo.entity.Product">
       UPDATE product
        <set>
@@ -75,5 +83,11 @@
        </set>
        WHERE id = #{id}
     </delete>
+    
+	<!--   商品データ追加  -->
+	<insert id="insert" parameterType="demo.entity.Product" useGeneratedKeys = "true" keyProperty="id">
+	INSERT INTO product(product_name, product_code, category, price, stock, description, status)
+	VALUES (#{productName}, #{productCode}, #{category}, #{price}, #{stock}, #{description}, #{status})
+	</insert>
   
 </mapper>

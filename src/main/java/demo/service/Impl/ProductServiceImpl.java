@@ -20,29 +20,30 @@ public class ProductServiceImpl implements ProductService{
 	@Autowired
 	private ProductMapper ProductMapper;
 	/*
-	 * 商品一覧検索
-	 * return 商品検索リスト
+	 * 商品リスト画面
+	 * return 商品リスト
 	 */
 	@Override
 	public List<Product> findAll(){
-		log.debug("商品一覧画面表示");
+		log.debug("商品リスト画面表示");
 		return ProductMapper.findAll();
 		
 	}
 	
 	/*
-	 * 商品情報編集
-	 * return 商品検索リスト
+	 * 商品更新画面
+	 * @param ID
+	 * return 商品更新画面に遷移
 	 */
 	@Override
 	public Product findById(Long id) {
-		log.debug("商品ID編集：{}",id);
+		log.debug("商品ID更新：{}",id);
 		return ProductMapper.findById(id);
 	}
 	
 	/*
 	 * 商品削除
-	 * @param ID
+	 * @param ID 商品IDで検索して削除
 	 * return 削除ID
 	 */
 	@Override
@@ -65,11 +66,11 @@ public class ProductServiceImpl implements ProductService{
             throw new RuntimeException("商品删除失敗");
         }
 	}
-	/**
-     * 商品更新情報
-     * 
+	
+	/*
+     * 商品データ更新
      * @param productDTO 商品情報
-     * @return 商品情報が更新された
+     * @return 商品データ更新
      */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -90,7 +91,7 @@ public class ProductServiceImpl implements ProductService{
 	            throw new RuntimeException("商品コードがすでに別の商品で使用されている");
 		   }	
 		}	
-		//3. 商品更新する
+		//3. 商品データ更新
 		Product product = new Product();
 		BeanUtils.copyProperties(productDTO, product);
 		int result = ProductMapper.update(product);
@@ -101,6 +102,38 @@ public class ProductServiceImpl implements ProductService{
             log.error("商品更新失敗，商品ID：{}", productDTO.getId());
             throw new RuntimeException("商品更新失敗");
         }
+		
+	}
+	
+	/*
+	 * 商品データ追加
+     * @param productDTO 商品情報
+     * @return 商品データ追加
+	 * 
+	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public Product add(ProductDTO productDTO) {
+		log.info("商品追加,商品コード:{}", productDTO.getProductCode());
+		//1. 商品コードが存在するかチェック
+		Product existingProduct =  ProductMapper.findByproductCode(productDTO.getProductCode());
+		if(existingProduct != null) {
+		log.warn("商品が存在しない,商品コード：{}", productDTO.getId());
+		throw new RuntimeException("商品存在しない");
+		}
+		
+		//商品追加
+		Product product = new Product();
+		BeanUtils.copyProperties(productDTO, product);
+		int result = ProductMapper.insert(product);
+		if(result > 0) {
+		    log.info("商品追加成功，商品コード：{}", product.getProductCode());
+            return product;
+        } else {
+            log.error("商品追加失敗，商品コード：{}", productDTO.getProductCode());
+            throw new RuntimeException("商品追加失敗");
+        }
+		
 		
 	}
 

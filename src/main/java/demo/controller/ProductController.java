@@ -53,7 +53,24 @@ public class ProductController {
 	}
 	
 	/**
-     * すべて商品検索
+     * 商品追加画面
+     * 
+     * @param session 
+     * @return 商品追加ビュー
+     */
+    @GetMapping("/add")
+    public String addpage(HttpSession session) {
+    		if(session.getAttribute("currentUser") == null) {
+    			log.warn("未登録，登録画面に戻す");
+    			return "redirect:/user/login";
+    		}
+    		log.debug("商品追加画面訪問");
+    		
+    	 return "product-add";
+    }
+	
+	/**
+     * すべて商品情報検索
      * 
      * @return 商品リスト
      */
@@ -71,7 +88,7 @@ public class ProductController {
     }
     
     /**
-     * 商品編集画面
+     * 商品更新画面
      * 
      * @param id 商品ID
      * @param model 
@@ -86,7 +103,7 @@ public class ProductController {
             return "redirect:/user/login";
     	}
     	
-    	log.debug("商品編集、商品ID：{}", id);
+    	log.debug("商品更新、商品ID：{}", id);
         Product product= productService.findById(id);
         if (product == null) {
             return "redirect:/product/list";
@@ -117,7 +134,38 @@ public class ProductController {
     }
     
     /**
-     * 商品更新機能
+     * 商品データ追加
+     * 
+     * @param　productDto 商品情報
+     * @param bindingResult データチェック結果
+     * @return 追加結果
+     * 
+     */
+    @PostMapping("/add")
+    @ResponseBody
+    public Result<Product> add(@Valid @RequestBody ProductDTO productDTO,
+    							BindingResult bindingResult){
+    	log.info("商品追加リクエスト処理,商品コード：{}",productDTO.getProductCode());
+    	//リクエストパラメータチェック
+    	if(bindingResult.hasErrors()) {
+    	String errorMsg = bindingResult.getFieldError().getDefaultMessage();
+        log.warn("商品追加パラメータチェック失敗：{}", errorMsg);
+        return Result.error(errorMsg);
+    	}
+        //商品追加
+      try {  
+    	  Product product = productService.add(productDTO);
+    	  log.info("商品追加成功：{}", product.getProductCode());
+         return Result.success("商品追加成功", product);
+         }catch (Exception e) {
+         log.error("商品追加失敗:{}",e.getMessage());	 
+		 return Result.error(e.getMessage());
+	   }
+    
+    }
+    
+    /**
+     * 商品データ更新機能
      * 
      * @param productDTO 商品情報
      * @param bindingResult データチェック結果
@@ -135,7 +183,7 @@ public class ProductController {
             log.warn("商品更新パラメータチェック失敗：{}", errorMsg);
             return Result.error(errorMsg);
         }
-        
+        //商品更新
         try {
             Product product = productService.update(productDTO);
             log.info("商品更新成功：{}", product.getId());

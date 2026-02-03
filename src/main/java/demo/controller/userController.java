@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -96,12 +95,48 @@ public class userController {
 		return "register";
 	}
 	//新規登録処理
-	@PostMapping("/register")
-	public String register(user user,Model model) {
-		//新規ユーザー登録処理
-		 userService.register(user);
-		 log.debug("新規登録画面出来ました");
-		return "register";
-		
-	}
+//	@PostMapping("/register")
+//	public String register(user user,Model model) {
+//		//新規ユーザー登録処理
+//		 userService.register(user);
+//		 log.debug("新規登録画面出来ました");
+//		return "register";
+//		
+//	}
+	
+	 /**
+     * ユーザーログアウトリクエスト処理
+     * 
+     * @param session HTTP
+     * @return ログアウト結果
+     */
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        String username = (String) session.getAttribute("username");
+        log.info("ユーザーログアウト：{}", username);
+        
+        // クリアsession
+        session.invalidate();
+        
+        return "redirect:/user/login";
+    }
+    
+    /**
+     * ユーザー登録情報取得
+     * 
+     * @param session HTTP
+     * @return 現在ユーザー登録情報
+     */
+    @GetMapping("/current")
+    @ResponseBody
+    public Result<user> getCurrentUser(HttpSession session) {
+        user currentUser = (user) session.getAttribute("currentUser");
+        if (currentUser != null) {
+            // パスワード情報は返しません
+            currentUser.setPassword(null);
+            return Result.success(currentUser);
+        } else {
+            return Result.error(401, "未登録");
+        }
+    }
 }

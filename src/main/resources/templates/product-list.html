@@ -7,7 +7,7 @@
 	<link rel="stylesheet" th:href="@{/css/common.css}">
 </head>
 <body>
-	<!-- 导航栏 -->
+	<!-- ボディ情報 -->
 	  <nav class="navbar">
 	      <div class="navbar-content">
 	          <a href="#" class="navbar-brand">EC商品管理システム</a>
@@ -113,7 +113,7 @@
 		                       <td>${formatDateTime(product.createTime)}</td>
 		                       <td>
 		                           <div class="table-actions">
-		                               <a href="/zhl/product/edit/${product.id}" class="btn btn-primary">編集</a>
+		                               <a href="/zhl/product/edit/${product.id}" class="btn btn-primary">更新</a>
 		                               <button onclick="deleteProduct(${product.id})" class="btn btn-danger">削除</button>
 		                           </div>
 		                       </td>
