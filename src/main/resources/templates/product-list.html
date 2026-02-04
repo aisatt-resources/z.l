@@ -28,7 +28,7 @@
 	             <!-- 項目 -->
 	             <div class="toolbar">
 	                 <div class="search-box">
-	                     <input type="text" id="searchInput" class="search-input" placeholder="商品名、IDを検索...">
+	                     <input type="text" id="searchInput" class="search-input" placeholder="商品名,コード番号を検索...">
 	                     <button onclick="searchProducts()" class="btn btn-primary">検索</button>
 	                     <button onclick="loadProducts()" class="btn btn-secondary">リセット</button>
 	                 </div>
@@ -121,6 +121,33 @@
 		                   </tr>
 		               `).join('');
 		           }
+		  // 商品検索
+			async function searchProducts() {
+				  const keyword = document.getElementById('searchInput').value.trim();
+				               
+				  if (!keyword) {
+				     loadProducts();
+				      return;
+				     }
+				               
+				     showLoading(true);
+				               
+				  try {
+				         const response = await fetch('/zhl/product/search?keyword=' + encodeURIComponent(keyword));
+				         const result = await response.json();
+				                   
+				         if (result.code === 200) {
+				             renderProducts(result.data);
+				            } else {
+				               showAlert('検索失敗: ' + result.message, 'error');
+				            }
+				      } catch (error) {
+				           console.error('商品検索失敗:', error);
+				           showAlert('ネットワークエラーです。しばらくしてからもう一度お試しください', 'error');
+				      } finally {
+				           showLoading(false);
+				        }
+				      }		   
 				   
 		 // 読み込みアニメーションの表示/非表示
 		   function showLoading(show) {
@@ -163,6 +190,7 @@
 						 showAlert('ネットワークエラーです。しばらくしてからもう一度お試しください', 'error');
 						}
 				}
+		
 		 // formatDateTimeJSON
 			function formatDateTime(dateTimeStr) {
 				 if (!dateTimeStr) return '-';
@@ -175,7 +203,33 @@
 					  minute: '2-digit'
 					});
 				}
-
+		
+		  // メッセージプロンプトを表示
+			 function showAlert(message, type) {
+				const alertBox = document.getElementById('alertBox');
+				 alertBox.textContent = message;
+				 alertBox.className = 'alert alert-' + type + ' show';
+				            
+				    setTimeout(() => {
+				        alertBox.className = 'alert';
+				     }, 3000);
+				 }
+		 
+	     // フィールドエラーの表示
+			function showFieldError(fieldName, message) {
+				 const input = document.getElementById(fieldName);
+				 const error = document.getElementById(fieldName + 'Error');
+				      input.classList.add('error');
+				      error.textContent = message;
+				      error.classList.add('show');
+				 }
+				
+		 // 検索エンター事件
+		     document.getElementById('searchInput').addEventListener('keypress', function(e) {
+				  if (e.key === 'Enter') {
+				       searchProducts();
+				     }
+				 });
   </script>
 </body>
 </html>

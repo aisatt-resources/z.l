@@ -28,7 +28,7 @@ public class ProductServiceImpl implements ProductService{
 	private ProductMapper ProductMapper;
 	
 	/**
-	 * 商品リスト画面
+	 * 商品リスト画面処理
 	 * return 商品リスト
 	 */
 	@Override
@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 	
 	/**
-	 * 商品更新画面
+	 * 商品更新画面レイアウト
 	 * @param ID
 	 * return 商品更新画面に遷移
 	 */
@@ -50,33 +50,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 	
 	/**
-	 * 商品削除
-	 * @param ID 商品IDで検索して削除
-	 * return 削除ID
-	 */
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void deleteById(Long id) {
-		log.info("商品削除成功ID{}",id);
-		   // 1. 商品が存在するかチェック
-        Product product = ProductMapper.findById(id);
-        if (product == null) {
-            log.warn("商品が存在しない，商品ID：{}", id);
-            throw new RuntimeException("商品が存在しない");
-        }
-        
-        // 2. 商品删除情報
-        int result = ProductMapper.deleteById(id);
-        if (result > 0) {
-            log.info("商品删除成功，商品ID：{}", id);
-        } else {
-            log.error("商品删除失败，商品ID：{}", id);
-            throw new RuntimeException("商品删除失敗");
-        }
-	}
-	
-	/**
-     * 商品データ更新
+     * 商品データ更新処理
      * @param productDTO 商品情報
      * @return 商品データ更新
      */
@@ -114,7 +88,33 @@ public class ProductServiceImpl implements ProductService{
 	}
 	
 	/**
-	 * 商品データ追加
+	 * 商品削除処理
+	 * @param ID 商品IDで検索して削除
+	 * return 削除ID
+	 */
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void deleteById(Long id) {
+		log.info("商品削除成功ID{}",id);
+		   // 1. 商品が存在するかチェック
+        Product product = ProductMapper.findById(id);
+        if (product == null) {
+            log.warn("商品が存在しない，商品ID：{}", id);
+            throw new RuntimeException("商品が存在しない");
+        }
+        
+        // 2. 商品删除情報
+        int result = ProductMapper.deleteById(id);
+        if (result > 0) {
+            log.info("商品删除成功，商品ID：{}", id);
+        } else {
+            log.error("商品删除失败，商品ID：{}", id);
+            throw new RuntimeException("商品删除失敗");
+        }
+	}
+		
+	/**
+	 * 商品データ追加処理
      * @param productDTO 商品情報
      * @return 商品データ追加
 	 */
@@ -140,7 +140,18 @@ public class ProductServiceImpl implements ProductService{
             log.error("商品追加失敗，商品コード：{}", productDTO.getProductCode());
             throw new RuntimeException("商品追加失敗");
         }
-		
+				
+	}
+	
+	/**
+	 * 商品名で検索処理
+     * @param productName 商品名
+     * @return 商品リスト
+	 */
+	@Override
+	public List<Product> searchByname(String productName) {
+		log.debug("商品名検索:{}", productName);
+		return ProductMapper.findBysearchName(productName);
 		
 	}
 

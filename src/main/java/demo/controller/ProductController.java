@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import demo.dto.ProductDTO;
@@ -63,23 +64,6 @@ public class ProductController {
 	}
 	
 	/**
-     * 商品追加画面
-     * 
-     * @param session 
-     * @return 商品追加ビュー
-     */
-    @GetMapping("/add")
-    public String addpage(HttpSession session) {
-    		if(session.getAttribute("currentUser") == null) {
-    			log.warn("未登録，登録画面に戻す");
-    			return "redirect:/user/login";
-    		}
-    		log.debug("商品追加画面訪問");
-    		
-    	 return "product-add";
-    }
-	
-	/**
      * すべて商品情報検索
      * 
      * @return 商品リスト
@@ -96,51 +80,22 @@ public class ProductController {
             return Result.error(e.getMessage());
         }
     }
-    
-    /**
-     * 商品更新画面
+	
+	/**
+     * 商品追加画面レイアウト
      * 
-     * @param id 商品ID
-     * @param model 
-     * @param session
-     * @return product-edit
+     * @param session 
+     * @return 商品追加ビュー
      */
-    @GetMapping("/edit/{id}")
-    public String editpage(@PathVariable Long id,Model model, HttpSession session) {
-    	//登録情報チェック
-    	if(session.getAttribute("currentUser") == null) {
-    		log.warn("未登録，リスト画面に戻す");
-            return "redirect:/user/login";
-    	}
-    	
-    	log.debug("商品更新、商品ID：{}", id);
-        Product product= productService.findById(id);
-        if (product == null) {
-            return "redirect:/product/list";
-        }
-        model.addAttribute("product", product);
-        return "product-edit";	
-    }
-    
-    /**
-     * 商品削除
-     * 
-     * @param id 商品ID
-     * @return 削除結果
-     */
-    @DeleteMapping("/{id}")
-    @ResponseBody
-    public Result<Void> deleteById(@PathVariable Long id){
-    		log.info("商品削除処理，商品ID：{}", id);
-        
-        try {
-            productService.deleteById(id);
-            log.info("商品削除成功：{}", id);
-            return Result.success("削除成功", null);
-        } catch (Exception e) {
-            log.error("商品削除失敗：{}", e.getMessage());
-            return Result.error(e.getMessage());
-        }
+    @GetMapping("/add")
+    public String addpage(HttpSession session) {
+    		if(session.getAttribute("currentUser") == null) {
+    			log.warn("未登録，登録画面に戻す");
+    			return "redirect:/user/login";
+    		}
+    		log.debug("商品追加画面訪問");
+    		
+    	 return "product-add";
     }
     
     /**
@@ -173,6 +128,31 @@ public class ProductController {
 	   }
     
     }
+	  
+    /**
+     * 商品更新画面レイアウト
+     * 
+     * @param id 商品ID
+     * @param model 
+     * @param session
+     * @return product-edit
+     */
+    @GetMapping("/edit/{id}")
+    public String editpage(@PathVariable Long id,Model model, HttpSession session) {
+    	//登録情報チェック
+    	if(session.getAttribute("currentUser") == null) {
+    		log.warn("未登録，リスト画面に戻す");
+            return "redirect:/user/login";
+    	}
+    	
+    	log.debug("商品更新、商品ID：{}", id);
+        Product product= productService.findById(id);
+        if (product == null) {
+            return "redirect:/product/list";
+        }
+        model.addAttribute("product", product);
+        return "product-edit";	
+    }
     
     /**
      * 商品データ更新機能
@@ -204,5 +184,45 @@ public class ProductController {
         }
     }
     
+    /**
+     * 商品削除
+     * 
+     * @param id 商品ID
+     * @return 削除結果
+     */
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public Result<Void> deleteById(@PathVariable Long id){
+    		log.info("商品削除処理，商品ID：{}", id);
+        
+        try {
+            productService.deleteById(id);
+            log.info("商品削除成功：{}", id);
+            return Result.success("削除成功", null);
+        } catch (Exception e) {
+            log.error("商品削除失敗：{}", e.getMessage());
+            return Result.error(e.getMessage());
+        }
+    } 
     
-}
+    /**
+     * 商品名を検索処理
+     * 
+     * @param keyWord 商品名
+     * @return product 商品リストデータ
+     *
+     */
+    @GetMapping("/search")
+    @ResponseBody
+    public Result<List<Product>> search(@RequestParam String keyword){
+    	log.info("商品名検索,キーワード：{}", keyword);
+    	try {
+            List<Product> products = productService.searchByname(keyword);
+            return Result.success(products);
+        } catch (Exception e) {
+            log.error("商品名検索失敗：{}", e.getMessage());
+            return Result.error(e.getMessage());
+        }
+    	
+    }
+    }
