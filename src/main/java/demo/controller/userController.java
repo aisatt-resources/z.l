@@ -13,11 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import demo.dto.UserLoginDTO;
+import demo.dto.UserRegisterDTO;
 import demo.entity.user;
 import demo.service.userService;
 import demo.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * ユーザーコントローラー
+ * ユーザー関するHTTPリクエスト処理
+ * 
+ * @author 柳志恒
+ * @since 2026/1/23
+ * @version 1.0.1
+ */
 
 @Slf4j
 @Controller
@@ -26,8 +35,9 @@ public class userController {
 	@Autowired
 	private userService userService;
 	
-	/*
+	/**
 	 *ログイン画面表示
+	 *return login ユーザーログイン画面表示
 	 */
 	@GetMapping("/login")
 	public String loginFrom() {
@@ -36,35 +46,25 @@ public class userController {
 		return "login";
 	}
 	
-	/*
-	 * 画面一覧
-	 */
-		@GetMapping("/product-list")
-		public String productFrom() {
-			log.debug("商品管理一覧画面訪問");
-			//login,htmlに返す
-			return "product-list";
-		}
-	
 	/**
-     * ユーザー登録処理
+     * ユーザーログイン処理
      * 
-     * @param loginDTO 登録メッセージ
+     * @param loginDTO ログインメッセージ
      * @param bindingResult データ検証結果
-     * @param session HTTP会话
-     * @return 登録結果
+     * @param session HTTP
+     * @return ログイン結果
      */
     @PostMapping("/login")
     @ResponseBody
     public Result<user> login(@Valid @RequestBody UserLoginDTO loginDTO, 
                               BindingResult bindingResult,
                               HttpSession session) {
-        log.info("登録リクエスト処理，ユーザー名：{}", loginDTO.getUsername());
+        log.info("ログインリクエスト処理，ユーザー名：{}", loginDTO.getUsername());
         
         // 	検証リクエストパラメータ
         if (bindingResult.hasErrors()) {
             String errorMsg = bindingResult.getFieldError().getDefaultMessage();
-            log.warn("登録パラメータ検証失敗：{}", errorMsg);
+            log.warn("ログインパラメータ検証失敗：{}", errorMsg);
             return Result.error(errorMsg);
         }
         
@@ -80,7 +80,7 @@ public class userController {
             // パスワード情報が返されない
             user.setPassword(null);
             
-            log.info("ユーザーID登録成功：{}", user.getUsername());
+            log.info("ユーザーログイン登録成功：{}", user.getUsername());
             return Result.success("登録成功", user);
         } catch (Exception e) {
             log.error("登録失敗：{}", e.getMessage());
@@ -88,23 +88,7 @@ public class userController {
         }
     }
     
-	//新規登録画面表示
-	@GetMapping("/register")
-	public String registerFrom() {
-		log.debug("新規登録画面訪問");
-		return "register";
-	}
-	//新規登録処理
-//	@PostMapping("/register")
-//	public String register(user user,Model model) {
-//		//新規ユーザー登録処理
-//		 userService.register(user);
-//		 log.debug("新規登録画面出来ました");
-//		return "register";
-//		
-//	}
-	
-	 /**
+    /**
      * ユーザーログアウトリクエスト処理
      * 
      * @param session HTTP
@@ -139,4 +123,63 @@ public class userController {
             return Result.error(401, "未登録");
         }
     }
+	
+  /**
+   * 新規口座作成画面表示
+   * return register 新規口座作成画面に遷移
+   */
+  	@GetMapping("/register")
+  	public String registerFrom() {
+  		log.debug("新規口座作成画面訪問");
+  		return "register";
+  	}
+  	
+  	/**
+     * 新規ユーザー登録処理
+     * 
+     * @param registerDTO 登録メッセージ
+     * @param bindingResult データ検証結果
+     * @param session HTTP
+     * @return 登録結果
+     */
+    @PostMapping("/register")
+    @ResponseBody
+    public Result<user> regisert(@Valid @RequestBody UserRegisterDTO registerDTO, 
+                              BindingResult bindingResult,
+                              HttpSession session) {
+        log.info("新規作成リクエスト処理，ユーザー名：{}", registerDTO.getUsername());
+        
+        // 	検証リクエストパラメータ
+        if (bindingResult.hasErrors()) {
+            String errorMsg = bindingResult.getFieldError().getDefaultMessage();
+            log.warn("新規作成パラメータ検証失敗：{}", errorMsg);
+            return Result.error(errorMsg);
+        }
+        
+        try {
+            // servcie側呼び出し
+            user user = userService.register(registerDTO);
+            
+            // パスワード情報が返されない
+            user.setPassword(null);
+            
+            log.info("新規作成登録成功：{}", user.getUsername());
+            return Result.success("登録成功", user);
+        } catch (Exception e) {
+            log.error("登録失敗：{}", e.getMessage());
+            return Result.error(e.getMessage());
+        }
+    }
+    
+	/**
+	 * 商品管理リスト画面
+	 * return product-list 商品管理リスト画面に遷移
+	 */
+	@GetMapping("/product-list")
+	public String productFrom() {
+		log.debug("商品管理リスト画面訪問");
+		//login,htmlに返す
+		return "product-list";
+	}
+	
 }

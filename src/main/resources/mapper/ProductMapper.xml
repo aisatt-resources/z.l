@@ -34,7 +34,7 @@
         FROM product
     </select>
     
-     <!-- 商品ID条件で検索 ID検索結果で更新画面に遷移-->
+    <!-- 商品ID条件で検索 ID検索結果で更新画面に遷移-->
     <select id="findById" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -42,7 +42,7 @@
         WHERE id = #{id}
     </select>
     
-       <!-- 商品コード条件で検索 -->
+    <!-- 商品コード条件で検索 -->
     <select id="findByproductCode" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -50,7 +50,7 @@
         WHERE product_Code = #{productCode}
     </select>
     
-	 <!-- 商品ID条件で削除 -->
+	<!-- 商品ID条件で削除 -->
     <delete id="deleteById">
         DELETE FROM product WHERE id = #{id}
     </delete>

@@ -13,13 +13,21 @@ import demo.mapper.ProductMapper;
 import demo.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 商品実装
+ * 
+ * @author 柳志恒
+ * @since 2026/1/30
+ * @version 1.0.1* 
+ */
 @Slf4j
 @Service
 public class ProductServiceImpl implements ProductService{
 	
 	@Autowired
 	private ProductMapper ProductMapper;
-	/*
+	
+	/**
 	 * 商品リスト画面
 	 * return 商品リスト
 	 */
@@ -30,7 +38,7 @@ public class ProductServiceImpl implements ProductService{
 		
 	}
 	
-	/*
+	/**
 	 * 商品更新画面
 	 * @param ID
 	 * return 商品更新画面に遷移
@@ -41,7 +49,7 @@ public class ProductServiceImpl implements ProductService{
 		return ProductMapper.findById(id);
 	}
 	
-	/*
+	/**
 	 * 商品削除
 	 * @param ID 商品IDで検索して削除
 	 * return 削除ID
@@ -67,7 +75,7 @@ public class ProductServiceImpl implements ProductService{
         }
 	}
 	
-	/*
+	/**
      * 商品データ更新
      * @param productDTO 商品情報
      * @return 商品データ更新
@@ -105,11 +113,10 @@ public class ProductServiceImpl implements ProductService{
 		
 	}
 	
-	/*
+	/**
 	 * 商品データ追加
      * @param productDTO 商品情報
      * @return 商品データ追加
-	 * 
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)

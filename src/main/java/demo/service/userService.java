@@ -1,21 +1,28 @@
 package demo.service;
 
 
-import jakarta.validation.Valid;
-
 import demo.dto.UserLoginDTO;
+import demo.dto.UserRegisterDTO;
 import demo.entity.user;
 
-
+/**
+ * ユーザーインターフェース
+ * 
+ * @author 柳志恒
+ * @since 2026/1/29
+ * @version 1.0.1* 
+ */
 public interface userService {
 	
-	/*
-	 * 新規口座作成
+	/**
+	 * ユーザーログイン
+	 * @param loginDTO ユーザーログインオブジェクト
 	 */
-	//void register(user user);
+	user login(UserLoginDTO loginDTO);
 	
-	/*
-	 * ユーザーIDログイン
+	/**
+	 * 新規作成登録
+	 * @param registerDTO 新規作成オブジェクト
 	 */
-	user login(@Valid UserLoginDTO loginDTO);
+	user register(UserRegisterDTO registerDTO);
 }

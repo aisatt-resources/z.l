@@ -16,6 +16,10 @@ import lombok.Data;
 /**
  * 商品データ送信オブジェクト
  * フロントエンドからログインフォームデータを受信して​​検証
+ * 
+ * @author 柳志恒
+ * @since 2026-1-30
+ * @version 1.0.1
  */
 @Data
 public class ProductDTO {
@@ -27,31 +31,31 @@ public class ProductDTO {
     
     /**
      * 商品名
-     * 検証規則：NOT NULL，長さ2-200個文字
+     * チェック規則：NOT NULL，長さ2-200文字で入力
      */
     @NotBlank(message = "商品名NOT　NULL")
-    @Size(min = 2, max = 200, message = "商品名長さは2-200個文字間")
+    @Size(min = 2, max = 200, message = "商品名長さは2-200文字で入力してください")
     private String productName;
     
     /**
      * 商品コード
-     * 検証規則：NOT NULL，長さ2-50個文字，文字、数字、-線
+     * チェック規則：NOT NULL，長さ2-50文字で入力，文字、数字、-線
      */
     @NotBlank(message = "商品コードNOT　NULL")
-    @Size(min = 2, max = 50, message = "商品コード長さは2-50字間")
-    @Pattern(regexp = "^[a-zA-Z0-9-]+$", message = "商品コード文字，文字、数字、-線")
+    @Size(min = 2, max = 50, message = "商品コード長さは2-50文字で入力してください")
+    @Pattern(regexp = "^[a-zA-Z0-9-]+$", message = "商品コード文字，数字，水平線")
     private String productCode;
     
     /**
      * 商品分類
-     * 検証規則：文字の長さは最大100
+     * チェック規則：文字の長さは最大100
      */
     @Size(max = 100, message = "商品分類の長さは100文字以内")
     private String category;
     
     /**
      * 価格
-     * 検証規則：NOT NULL，0より大きい数字
+     * チェック規則：NOT NULL，0より大きい数字
      */
     @NotNull(message = "価格はNOT　NULL")
     @DecimalMin(value = "0", message = "価格は0より大きい数字")
@@ -60,7 +64,7 @@ public class ProductDTO {
     
     /**
      * 在庫数
-     * 検証規則：NOT NULL，0か、0より大きい数字
+     * チェック規則：NOT NULL，0か、0より大きい数字
      */
     @NotNull(message = "在庫数NOT　NULL")
     @Min(value = 0, message = "在庫数は0以下ではできません")
@@ -68,14 +72,14 @@ public class ProductDTO {
     
     /**
      * 商品コメント
-     * 検証規則：最大1000文字まで
+     * チェック規則：最大1000文字まで
      */
     @Size(max = 1000, message = "商品コメントは1000文字以上超えることができません")
     private String description;
        
     /**
      * ステータス（0-購入不可，1-購入可能）
-     * 検証規則：NOT NULL，ステータス値0 or 1を選択
+     * チェック規則：NOT NULL，ステータス値0 or 1を選択
      */
     @NotNull(message = "ステータスNOT　NULL")
     @Min(value = 0, message = "ステータス値0 or 1を選択")

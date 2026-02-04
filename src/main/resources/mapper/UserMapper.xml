@@ -5,7 +5,7 @@
 
 <mapper namespace="demo.mapper.userMapper">
 
-<!--     结果映射 -->
+<!--     マッピング結果 -->
     <resultMap id="BaseResultMap" type="demo.entity.user">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
@@ -16,10 +16,11 @@
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-<!--     基础列 -->
+<!--     商品データまとめ -->
     <sql id="Base_Column_List">
         id, username, password, role, status, create_time, update_time
     </sql>
+    
 <!--     ログイン用：ユーザー取得 -->
     <select id="findByuserName" resultMap="BaseResultMap">
         SELECT 
@@ -29,9 +30,9 @@
     </select>
 
 <!--	     新規登録 -->
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO users (username, password)
-        VALUES (#{username}, #{password})
+    <insert id="insert" parameterType= "demo.entity.user" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO users (username, password,role,status)
+        VALUES (#{username}, #{password}, #{role}, #{status})
     </insert>
 
 </mapper>

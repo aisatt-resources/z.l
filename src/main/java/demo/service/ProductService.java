@@ -6,35 +6,39 @@ import demo.dto.ProductDTO;
 import demo.entity.Product;
 
 
-/*
- * 商品クラスインターフェース
+/**
+ * 商品インターフェース
  * 
+ * @author 柳志恒
+ * @since 2026/1/30
+ * @version 1.0.1
  */
 public interface ProductService {
-	/*
+	
+	/**
 	 * 商品リスト画面
 	 */
 	List<Product> findAll();
 	
-	/*
+	/**
 	 * 商品更新画面
 	 * @param ID　商品IDで画面遷移
 	 */
 	Product findById(Long id);
 	
-	/*
+	/**
 	 * 商品削除ID
 	 * @param ID 商品IDで検索して削除
 	 */
 	void deleteById(Long id);
 	
-	/*
+	/**
 	 * 商品データ更新
 	 * @param productDTO 商品情報
 	 */
 	Product update(ProductDTO productDTO);
 	
-	/*
+	/**
 	 * 商品データ追加
 	 * @param productDTO 商品情報
 	 */

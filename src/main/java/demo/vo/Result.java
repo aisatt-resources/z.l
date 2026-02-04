@@ -5,10 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 結果情報クラス統一
+ * 結果クラス統一
  * カプセル化したAPIインターフェースのデータを返却
  * 
  * @param <T> 応答データ型
+ * @author 柳志恒
+ * @since 2026/1/29
+ * @version 1.0.1
  */
 @Data
 @NoArgsConstructor

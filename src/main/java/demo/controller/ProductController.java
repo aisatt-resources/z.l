@@ -23,10 +23,20 @@ import demo.service.ProductService;
 import demo.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 
+
+/**
+ * 商品コントローラー
+ * 商品関するHTTPリクエスト処理
+ * 
+ * @author 柳志恒
+ * @since 2026/1/27
+ * @version 1.0.1
+ */
 @Controller
 @RequestMapping("/product")
 @Slf4j
 public class ProductController {
+	
 	/**
      * 商品リスト画面
      * 

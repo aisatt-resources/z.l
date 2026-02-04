@@ -79,7 +79,8 @@
             </form>
         </div>
     </div>
-
+		
+<!--	商品追加ロジック処理-->
     <script>
         // 商品フォーム送信処理
         document.getElementById('productForm').addEventListener('submit', async function(e) {
@@ -99,7 +100,7 @@
                 status: parseInt(document.getElementById('status').value)
             };
             
-            // フロント側から検証
+            // フロント側からチェック
             if (!validateForm(formData)) {
                 return;
             }
@@ -123,7 +124,7 @@
                 
                 if (result.code === 200) {
                     // 追加成功
-                    showAlert('追加成功，リダイレクト...', 'success');
+                    showAlert('追加成功，商品リスト画面へ...', 'success');
                     setTimeout(() => {
                         window.location.href = '/zhl/product/list';
                     }, 1000);
@@ -141,7 +142,7 @@
             }
         });
         
-        // フォームデータチェック
+        // 商品DTO-APIチェック
         function validateForm(data) {
             let isValid = true;
             
