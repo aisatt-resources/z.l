@@ -163,3 +163,11 @@
 この分離により、ビジネスロジックとデータアクセスの具体的な実装を独立して変更・置換することができ、コードの結合度を低減しています。
 - **データバリデーション**: `dto` パッケージでは `jakarta.validation.constraints` アノテーションを使用してデータバリデーションルールを定義し、システムに入力されるデータの正当性と安全性を確保しています。
 コントローラー層は `@Valid` アノテーションを通じて検証をトリガーし、ビジネスロジックが常に有効なデータを処理することを保証します。
+
+
+ログイン画面
+　　
+<img width="1195" height="828" alt="image" src="https://github.com/user-attachments/assets/2741b298-09be-43cb-93b5-b63eb94fd03c" />
+新規作成画面
+<img width="888" height="828" alt="image" src="https://github.com/user-attachments/assets/3128bee5-2e8a-46fa-8895-37e1bbfe01e6" />
+
