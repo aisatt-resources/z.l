@@ -165,37 +165,48 @@
 コントローラー層は `@Valid` アノテーションを通じて検証をトリガーし、ビジネスロジックが常に有効なデータを処理することを保証します。
 
 ログイン画面
+<img width="1495" height="805" alt="image" src="https://github.com/user-attachments/assets/b3588edc-8c2f-4042-9aeb-08eb94c244e6" />
 
 
 ログイン画面実行
+<img width="1471" height="881" alt="image" src="https://github.com/user-attachments/assets/5a8ecfa2-ee38-4d8e-a7c9-37b36814106b" />
 
 
 新規作成画面
+<img width="1537" height="944" alt="image" src="https://github.com/user-attachments/assets/3c912abf-a263-4754-b828-95fab29293f3" />
+
 
 
 新規作成実行
+<img width="768" height="826" alt="image" src="https://github.com/user-attachments/assets/e67643f6-d380-4e72-879d-fc051a61d5b8" />
 
 
 商品リスト画面
+<img width="1575" height="960" alt="image" src="https://github.com/user-attachments/assets/358392ea-6f58-4e7a-82dd-94920b49d6c8" />
 
 
 商品名検索とリセット機能
 
+<img width="1579" height="583" alt="image" src="https://github.com/user-attachments/assets/9b16b02f-8c41-4678-b310-f621a1bfbfd3" />
 
 
 商品更新画面
+<img width="1484" height="884" alt="image" src="https://github.com/user-attachments/assets/cfc9c8c2-514e-4147-8514-9fbb47d1e1f0" />
+<img width="1532" height="458" alt="image" src="https://github.com/user-attachments/assets/d40b49e7-7f03-4789-835d-7218fef1dd9a" />
 
 
-商品更新実行
+
+
 
 
 商品削除機能
+9番の商品を削除ボタン押したらポップアップが表示する
+<img width="1503" height="874" alt="image" src="https://github.com/user-attachments/assets/da70a2a8-b8e2-46fb-abe6-2d4c1b646692" />
 
 
 商品追加画面
-
-
-商品追加実行
+<img width="1574" height="946" alt="image" src="https://github.com/user-attachments/assets/47acea4e-84eb-4df3-bd94-8a2e8102816a" />
+<img width="1540" height="467" alt="image" src="https://github.com/user-attachments/assets/1a82c787-9245-4887-a042-44e18678af8a" />
 
 
 
