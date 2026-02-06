@@ -168,8 +168,12 @@
 <img width="1495" height="805" alt="image" src="https://github.com/user-attachments/assets/b3588edc-8c2f-4042-9aeb-08eb94c244e6" />
 
 
+
+
 ログイン画面実行
 <img width="1471" height="881" alt="image" src="https://github.com/user-attachments/assets/5a8ecfa2-ee38-4d8e-a7c9-37b36814106b" />
+
+
 
 
 新規作成画面
@@ -177,17 +181,26 @@
 
 
 
+
+
 新規作成実行
+
+
 <img width="768" height="826" alt="image" src="https://github.com/user-attachments/assets/e67643f6-d380-4e72-879d-fc051a61d5b8" />
+
+
 
 
 商品リスト画面
 <img width="1575" height="960" alt="image" src="https://github.com/user-attachments/assets/358392ea-6f58-4e7a-82dd-94920b49d6c8" />
 
 
-商品名検索とリセット機能
 
+
+商品名検索とリセット機能
 <img width="1579" height="583" alt="image" src="https://github.com/user-attachments/assets/9b16b02f-8c41-4678-b310-f621a1bfbfd3" />
+
+
 
 
 商品更新画面
@@ -202,6 +215,8 @@
 商品削除機能
 9番の商品を削除ボタン押したらポップアップが表示する
 <img width="1503" height="874" alt="image" src="https://github.com/user-attachments/assets/da70a2a8-b8e2-46fb-abe6-2d4c1b646692" />
+
+
 
 
 商品追加画面
